@@ -1,5 +1,7 @@
 class EmptySpace
-  def inspect
-    "empty"
+  def to_s
+    "  "
   end
+
+
 end
