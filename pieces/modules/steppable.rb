@@ -26,7 +26,7 @@ module Steppable
     self.move_dirs.each do |drow, dcol|
       row, col = @current_pos
       dpos = [drow + row, dcol + col]
-      possible_moves << dpos if @board.in_bounds?(dpos)
+      possible_moves << dpos if @board.in_bounds?(dpos) && @board[dpos].color != self.color
     end
 
     possible_moves

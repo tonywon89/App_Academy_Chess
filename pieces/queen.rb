@@ -9,5 +9,9 @@ class Queen < Piece
   end
 
 end
-
-p Queen.new(Board.new, [0,0]).moves
+b = Board.new
+black_queen = Queen.new(b, [1,1], :black)
+white_queen =  Queen.new(b, [0,0], :white)
+b[[2,2]] = black_queen
+b[[0,0]] = white_queen
+p white_queen.moves

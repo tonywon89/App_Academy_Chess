@@ -18,8 +18,8 @@ class Board
   end
 
   def []=(pos, value)
-    x, y = pos
-    @grid[x][y] = value
+    row, col = pos
+    @grid[row][col] = value
   end
 
   def size

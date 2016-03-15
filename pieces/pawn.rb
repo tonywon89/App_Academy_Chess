@@ -37,8 +37,8 @@ class Pawn < Piece
 
   def color_move(i)
     row, col = @current_pos
-    @color == "white" ? [row + i, col] : [row - i , col]
+    @color == :white ? [row + i, col] : [row - i , col]
   end
 end
 
-p Pawn.new(Board.new,[6,1], "black").moves
+p Pawn.new(Board.new,[6,1], :black).moves
