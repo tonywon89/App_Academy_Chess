@@ -1,9 +1,11 @@
 module Slideable
 
-  DIRECTIONS = {
-    straight: "straight",
-    diagonal: "diagonal"
-  }
+  STRAIT_STEPS = [
+    [1, 0],
+    [-1, 0],
+    [0, 1],
+    [0, -1]
+  ]
 
   DIAG_STEPS = [
     [1,-1],
@@ -24,10 +26,7 @@ module Slideable
         row, col = dpos
       end
     end
-    possible_moves.uniq
+    possible_moves
   end
 
-  def move_dirs
-    DIAG_STEPS
-  end
 end
