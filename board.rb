@@ -1,4 +1,4 @@
-require_relative 'pieces'
+require_relative 'pieces/empty_space'
 
 
 class Board
@@ -13,8 +13,8 @@ class Board
   end
 
   def [](pos)
-    x, y = pos
-    @grid[x][y]
+    row, col = pos
+    @grid[row][col]
   end
 
   def []=(pos, value)
@@ -22,6 +22,9 @@ class Board
     @grid[x][y] = value
   end
 
+  def size
+    grid.length
+  end
 
   def in_bounds?(pos)
     pos.all? { |x| x.between?(0, 7) }
@@ -29,7 +32,7 @@ class Board
 
   def move(start_pos, end_pos)
     if self[start_pos].is_a?(EmptySpace)
-      raise StandardError.new("No piece in start position")
+      raise StandardError, "No piece in start position"
     elsif self[end_pos].is_a?(Piece)
       raise StandardError.new("Spot is currently occupied")
     else
