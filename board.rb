@@ -8,9 +8,27 @@ class Board
   end
   attr_accessor :grid
 
-  def initialize(grid = Board.create_empty_grid)
-    @grid = grid
-    populate_grid
+  def initialize(fill = true)
+    @grid = Board.create_empty_grid
+    populate_grid if fill
+  end
+
+  def dup
+    new_board = Board.new(false)
+    pieces_on_board.each do |piece|
+      new_board[piece.current_pos] = piece.class.new(new_board, piece.current_pos ,piece.color)
+    end
+    new_board
+  end
+
+  def pieces_on_board
+    pieces = []
+
+    rows.each do |row|
+      row.each { |piece| pieces << piece if piece.is_a?(Piece) }
+    end
+
+    pieces
   end
 
   def populate_grid
@@ -106,18 +124,58 @@ class Board
   end
 
   def move(start_pos, end_pos)
-    if self[start_pos].is_a?(EmptySpace)
-      raise StandardError, "No piece in start position"
-    elsif self[end_pos].is_a?(Piece)
-      raise StandardError.new("Spot is currently occupied")
-    else
-      start = self[start_pos]
-      self[start_pos] = EmptySpace.new
-      self[end_pos] = start
-    end
+    
   rescue StandardError => e
     puts e.message
     retry
   end
 
+  def move!(start_pos,end_pos)
+    self[end_pos] = self[start_pos]
+    self[start_pos] = EmptySpace.new
+  end
+
+
+  def rows
+    @grid
+  end
+
+  def in_check?(color)
+    king = find_king(color)
+    opponent_pieces = []
+
+    rows.each do |row|
+      opponent_pieces += row.select { |piece| piece.is_a?(Piece) && piece.color != color }
+    end
+
+    opponent_pieces.any? do |piece|
+      piece.moves.include?(king.current_pos)
+    end
+  end
+
+  def checkmate?(color)
+
+    our_pieces = []
+    rows.each do |row|
+      our_pieces += row.select { |piece| piece.is_a?(Piece) && piece.color == color }
+    end
+
+    self.in_check?(color) && our_pieces.all? { |piece| piece.valid_moves.empty? }
+  end
+
+  def find_king(color)
+    king = nil
+    rows.each do |row|
+      row.each do |piece|
+        king = piece if piece.color == color && piece.is_a?(King)
+      end
+    end
+    king
+  end
 end
+
+b = Board.new
+duped = b.dup
+b[[6,4]] = Bishop.new(b,[6,4],:white)
+# p b.in_check?(:black)
+p duped
