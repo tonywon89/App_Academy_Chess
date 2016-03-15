@@ -5,11 +5,11 @@ class Pawn < Piece
   def initialize(board, pos, color)
     super(board, pos, color)
     @initial_pos = pos.dup
+    @symbol = color == :white ? "\u2659" : "\u265F"
   end
 
   def moves
     possible_moves =  starting_pos? ? initial_moves : forward_move
-
     possible_moves.concat(pawn_diag_moves)
 
   end
@@ -98,20 +98,20 @@ class Pawn < Piece
   end
 end
 
-b = Board.new
-pos1 = [1, 2]
-pos2 = [2, 1]
-pos3 = [3, 2]
-pos4 = [2, 3]
-
-white_pawn1 = Pawn.new(b, pos1, :white)
-white_pawn2 = Pawn.new(b, pos2, :white)
-black_pawn1 = Pawn.new(b, pos3, :black)
-black_pawn2 = Pawn.new(b, pos4, :black)
-
-b[pos1] = white_pawn1
-b[pos2] = white_pawn2
-# b[pos3] = black_pawn1
-b[pos4] = black_pawn2
-
-p white_pawn1.moves
+# b = Board.new
+# pos1 = [1, 2]
+# pos2 = [2, 1]
+# pos3 = [3, 2]
+# pos4 = [2, 3]
+#
+# white_pawn1 = Pawn.new(b, pos1, :white)
+# white_pawn2 = Pawn.new(b, pos2, :white)
+# black_pawn1 = Pawn.new(b, pos3, :black)
+# black_pawn2 = Pawn.new(b, pos4, :black)
+#
+# b[pos1] = white_pawn1
+# b[pos2] = white_pawn2
+# # b[pos3] = black_pawn1
+# b[pos4] = black_pawn2
+#
+# p white_pawn1.moves

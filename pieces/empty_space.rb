@@ -3,9 +3,9 @@ class EmptySpace
   def color
     :no_color
   end
-  
+
   def to_s
-    "  "
+    "   "
   end
 
   def move(pos)

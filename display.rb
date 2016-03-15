@@ -45,9 +45,10 @@ end
 
 board = Board.new
 display = Display.new(board)
-# 
-#
-# while true
-#       display.render
-#       result = display.get_input
-# end
+
+
+
+while true
+      display.render
+      result = display.get_input
+end

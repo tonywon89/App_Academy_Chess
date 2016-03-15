@@ -1,4 +1,4 @@
-require_relative '../board'
+
 
 class Piece
 
@@ -9,6 +9,10 @@ class Piece
     @board = board
     @current_pos = pos
     @color = color
+  end
+
+  def to_s
+    " #{@symbol.encode("utf-8")} "
   end
 
 end
