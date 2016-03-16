@@ -41,13 +41,17 @@ class Game
   end
 
   def play
-    until @board.checkmate?(@current_player.color)
+    while true
+      break if game_over?
       play_turn
       switch_player!
     end
     puts "Game Over"
   end
 
+  def game_over?
+    @board.checkmate?(@current_player.color)
+  end
 
 end
 
