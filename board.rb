@@ -41,7 +41,6 @@ class Board
     end
   rescue InvalidMoveError => e
     puts e.message
-    retry
   end
 
   def in_check?(color)
@@ -184,3 +183,12 @@ class Board
     king
   end
 end
+
+board = Board.new(false)
+white_knight = Knight.new(board, [2,2], :white)
+black_knight = Knight.new(board, [3,0], :black)
+
+board[[2,2]] = white_knight
+board[[3,0]] = black_knight
+
+p white_knight.moves

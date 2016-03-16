@@ -1,13 +1,14 @@
 class HumanPlayer
-
-  def initialize(name)
+  attr_reader :color, :name
+  def initialize(name, color)
     @name = name
+    @color = color
   end
 
   def get_input(display)
     input = nil
     until input
-      display.render
+      display.render(self)
       input = display.get_input
     end
     input

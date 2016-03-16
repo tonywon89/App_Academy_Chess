@@ -30,10 +30,10 @@ class Pawn < Piece
     diag_moves = []
 
     dpos = [row - 1, col + 1]
-    diag_moves << diag_move(dpos)
+    diag_moves << diag_move(dpos) if @board.in_bounds?(dpos)
 
     dpos = [row - 1, col - 1]
-    diag_moves << diag_move(dpos)
+    diag_moves << diag_move(dpos) if @board.in_bounds?(dpos)
 
     diag_moves
   end
@@ -43,10 +43,10 @@ class Pawn < Piece
     diag_moves = []
 
     dpos = [row + 1, col - 1]
-    diag_moves << diag_move(dpos)
+    diag_moves << diag_move(dpos) if @board.in_bounds?(dpos)
 
     dpos = [row + 1, col + 1]
-    diag_moves << diag_move(dpos)
+    diag_moves << diag_move(dpos) if @board.in_bounds?(dpos)
 
     diag_moves
 

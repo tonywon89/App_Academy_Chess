@@ -34,11 +34,13 @@ class Display
     { background: bg, color: :white }
   end
 
-  def render
+  def render(player)
     system("clear")
     puts "Fill the grid!"
     puts "Arrow keys, WASD, or vim to move, space or enter to confirm."
     build_grid.each { |row| puts row.join }
+    puts "#{player.name}'s Turn. He is #{player.color}"
+    puts "#{@board[[0,1]].valid_moves}"
   end
 
 end
