@@ -42,14 +42,3 @@ class Display
   end
 
 end
-
-board = Board.new
-duped = board.dup
-board[[6,4]] = Bishop.new(board,[6,4],:white)
-display = Display.new(board)
-
-
-while true
-  display.render
-  result = display.get_input
-end

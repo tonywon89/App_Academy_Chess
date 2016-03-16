@@ -1,5 +1,6 @@
 require_relative 'pieces/empty_space'
 require_relative 'pieces'
+require_relative 'errors'
 
 class Board
 
@@ -13,6 +14,59 @@ class Board
     populate_grid if fill
   end
 
+  def [](pos)
+    row, col = pos
+    @grid[row][col]
+  end
+
+  def []=(pos, value)
+    row, col = pos
+    @grid[row][col] = value
+  end
+
+  def size
+    grid.length
+  end
+
+  def in_bounds?(pos)
+    pos.all? { |x| x.between?(0, 7) }
+  end
+
+  def move(start_pos, end_pos)
+    if self[start_pos].valid_moves.include?(end_pos)
+      self[end_pos] = self[start_pos]
+      self[start_pos] = EmptySpace.new
+    else
+      raise InvalidMoveError, "That is not a valid move"
+    end
+  rescue InvalidMoveError => e
+    puts e.message
+    retry
+  end
+
+  def in_check?(color)
+    king = find_king(color)
+    opponent_pieces = []
+
+    rows.each do |row|
+      opponent_pieces += row.select { |piece| piece.is_a?(Piece) && piece.color != color }
+    end
+
+    opponent_pieces.any? do |piece|
+      piece.moves.include?(king.current_pos)
+    end
+  end
+
+  def checkmate?(color)
+
+    our_pieces = []
+    rows.each do |row|
+      our_pieces += row.select { |piece| piece.is_a?(Piece) && piece.color == color }
+    end
+
+    self.in_check?(color) && our_pieces.all? { |piece| piece.valid_moves.empty? }
+  end
+
   def dup
     new_board = Board.new(false)
     pieces_on_board.each do |piece|
@@ -21,15 +75,24 @@ class Board
     new_board
   end
 
-  def pieces_on_board
-    pieces = []
-
-    rows.each do |row|
-      row.each { |piece| pieces << piece if piece.is_a?(Piece) }
-    end
-
-    pieces
+  def move!(start_pos,end_pos)
+    self[end_pos] = self[start_pos]
+    self[start_pos] = EmptySpace.new
   end
+
+  private
+
+
+
+  def pieces_on_board
+      pieces = []
+
+      rows.each do |row|
+        row.each { |piece| pieces << piece if piece.is_a?(Piece) }
+      end
+
+      pieces
+    end
 
   def populate_grid
     pawn_setup
@@ -105,62 +168,10 @@ class Board
     end
   end
 
-  def [](pos)
-    row, col = pos
-    @grid[row][col]
-  end
-
-  def []=(pos, value)
-    row, col = pos
-    @grid[row][col] = value
-  end
-
-  def size
-    grid.length
-  end
-
-  def in_bounds?(pos)
-    pos.all? { |x| x.between?(0, 7) }
-  end
-
-  def move(start_pos, end_pos)
-    
-  rescue StandardError => e
-    puts e.message
-    retry
-  end
-
-  def move!(start_pos,end_pos)
-    self[end_pos] = self[start_pos]
-    self[start_pos] = EmptySpace.new
-  end
 
 
   def rows
     @grid
-  end
-
-  def in_check?(color)
-    king = find_king(color)
-    opponent_pieces = []
-
-    rows.each do |row|
-      opponent_pieces += row.select { |piece| piece.is_a?(Piece) && piece.color != color }
-    end
-
-    opponent_pieces.any? do |piece|
-      piece.moves.include?(king.current_pos)
-    end
-  end
-
-  def checkmate?(color)
-
-    our_pieces = []
-    rows.each do |row|
-      our_pieces += row.select { |piece| piece.is_a?(Piece) && piece.color == color }
-    end
-
-    self.in_check?(color) && our_pieces.all? { |piece| piece.valid_moves.empty? }
   end
 
   def find_king(color)
@@ -173,9 +184,3 @@ class Board
     king
   end
 end
-
-b = Board.new
-duped = b.dup
-b[[6,4]] = Bishop.new(b,[6,4],:white)
-# p b.in_check?(:black)
-p duped
